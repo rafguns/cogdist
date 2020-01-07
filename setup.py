@@ -26,6 +26,10 @@ setup(
     install_requires=[
         'numpy>=1.17',
         'pandas>=0.25',
+        'tqdm',
+        'joblib',
+        'scipy',
+        'matplotlib',
     ],
     python_requires='>=3.6',
     cmdclass={'test': PyTest},
