@@ -77,7 +77,7 @@ def weighted_cosine(u, v, S):
     if len(u) != len(v) != len(S):
         raise ValueError("Vectors or similarity matrix of different length.")
 
-    return u.dot(S).dot(v) / np.sqrt(u.dot(S).dot(u) * v.dot(S).dot(v))
+    return (u @ S @ v) / np.sqrt((u @ S @ u) * (v @ S @ v))
 
 
 def as_square_matrix(M, compare_by, *args, **kwargs):
