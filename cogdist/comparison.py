@@ -30,7 +30,7 @@ def barycenter(counts, coords):
         Coordinates of the barycenter (n dimensions)
 
     """
-    m, n = coords.shape
+    m, _ = coords.shape
 
     if len(counts) != m:
         raise ValueError("'counts' should have the same number of items "
