@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 
+__all__ = ["plot_cov_ellipse", "plot_point_cov"]
+
 
 def plot_point_cov(points, nstd=2, ax=None, **kwargs):
     """
@@ -48,6 +50,7 @@ def plot_cov_ellipse(cov, pos, nstd=2, ax=None, **kwargs):
     -------
         A matplotlib ellipse artist
     """
+
     def eigsorted(cov):
         vals, vecs = np.linalg.eigh(cov)
         order = vals.argsort()[::-1]

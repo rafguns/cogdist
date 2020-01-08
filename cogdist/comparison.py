@@ -4,6 +4,14 @@ import numpy as np
 import pandas as pd
 from scipy.spatial.distance import pdist, squareform
 
+__all__ = [
+    "as_square_matrix",
+    "barycenter",
+    "euclidean_distance",
+    "sa_vector",
+    "weighted_cosine",
+]
+
 
 def ensure_symmetric(M):
     # XXX This does only a very basic check. It should be tested/profiled if a
@@ -33,9 +41,10 @@ def barycenter(counts, coords):
     m, _ = coords.shape
 
     if len(counts) != m:
-        raise ValueError("'counts' should have the same number of items "
-                         "(now: {}) as rows of 'coords' (now: {})".format(
-                             len(counts), m))
+        raise ValueError(
+            "'counts' should have the same number of items "
+            "(now: {}) as rows of 'coords' (now: {})".format(len(counts), m)
+        )
 
     # Transposing because of broadcasting rules
     a = coords.T * counts
@@ -64,9 +73,12 @@ def sa_vector(counts, S, normalize=True):
     ensure_symmetric(S)
 
     if len(counts) != len(S):
-        raise ValueError("'counts' should have the same number of items "
-                         "(now: {}) as rows of similarity matrix (now: {})"
-                         .format(len(counts), len(S)))
+        raise ValueError(
+            "'counts' should have the same number of items "
+            "(now: {}) as rows of similarity matrix (now: {})".format(
+                len(counts), len(S)
+            )
+        )
 
     raw_sa_vector = (S * counts).sum(axis=1)
     return raw_sa_vector / raw_sa_vector.sum() if normalize else raw_sa_vector
@@ -126,7 +138,7 @@ def euclidean_distance(a, b):
 
     """
     if a.shape != b.shape:
-        raise ValueError('a and b should be of same shape')
+        raise ValueError("a and b should be of same shape")
 
     # For 1D vectors, axis is 0 instead of 1
     ndims = len(a.shape)
@@ -135,5 +147,5 @@ def euclidean_distance(a, b):
     elif ndims == 2:
         axis = 1
     else:
-        raise ValueError('Only one- and two-dimensional arrays are supported')
+        raise ValueError("Only one- and two-dimensional arrays are supported")
     return np.linalg.norm(a - b, axis=axis)
