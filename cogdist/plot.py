@@ -63,7 +63,7 @@ if __name__ == '__main__':
     for fname in glob.glob('*-ci-*.xlsx'):
         match = re.match(r'(.*)-ci-(.*).xlsx', fname)
         if match:
-            data[match.groups()] = pd.read_excel(fname)
+            data[match.groups()] = pd.read_excel(fname, index_col=[0, 1])
     print(data.keys())
 
     for k, df in data.items():

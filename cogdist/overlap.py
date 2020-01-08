@@ -18,7 +18,7 @@ def intervals_overlap(a, b):
 
 
 if __name__ == '__main__':
-    df = pd.read_excel(sys.argv[1])
+    df = pd.read_excel(sys.argv[1], index_col=[0, 1])
     df = fix_merged_cells(df)
     # We're only interested in individual PMs
     df = df.drop(['Panel Together', 'PanelTogether', 'Panel together'],
