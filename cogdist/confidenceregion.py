@@ -57,6 +57,8 @@ def plot_cov_ellipse(cov, pos, nstd=2, ax=None, **kwargs):
         ax = plt.gca()
 
     vals, vecs = eigsorted(cov)
+    # Disable false pylint warning https://github.com/PyCQA/pylint/issues/2435
+    # pylint: disable=assignment-from-no-return
     theta = np.degrees(np.arctan2(*vecs[:, 0][::-1]))
 
     # Width and height are "full" widths, not radius
