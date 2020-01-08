@@ -2,12 +2,7 @@ import sys
 
 import pandas as pd
 
-
-def fix_merged_cells(df):
-    # Merged cells in Excel show up as NaN. Fix this
-    df = df.reset_index()
-    df['level_0'] = df['level_0'].fillna(method='ffill')
-    return df.set_index(['level_0', 'level_1'])
+from .util import fix_merged_cells
 
 
 def intervals_overlap(a, b):

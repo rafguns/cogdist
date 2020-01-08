@@ -2,11 +2,13 @@
 import glob
 import re
 
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pandas as pd
 from matplotlib import rcParams
+
+from .util import fix_merged_cells
+
 rcParams.update({'figure.autolayout': True})
 
 
@@ -67,12 +69,7 @@ if __name__ == '__main__':
     print(data.keys())
 
     for k, df in data.items():
-        # Merged cells show up as NaN. Fix this first
-        df = df.reset_index()
-        df['level_0'] = df['level_0'].fillna(method='ffill')
-        df = df.set_index(['level_0', 'level_1'])
-
-        data[k] = df
+        data[k] = fix_merged_cells(df)
 
     fig = plt.figure()
     for (disc, method), df in data.items():
