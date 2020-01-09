@@ -140,12 +140,8 @@ def euclidean_distance(a, b):
     if a.shape != b.shape:
         raise ValueError("a and b should be of same shape")
 
-    # For 1D vectors, axis is 0 instead of 1
     ndims = len(a.shape)
-    if ndims == 1:
-        axis = 0
-    elif ndims == 2:
-        axis = 1
-    else:
+    if ndims > 2:
         raise ValueError("Only one- and two-dimensional arrays are supported")
-    return np.linalg.norm(a - b, axis=axis)
+    # For 1D vectors, axis is 0. For 2D vectors, axis is 1.
+    return np.linalg.norm(a - b, axis=ndims - 1)
