@@ -3,8 +3,9 @@ import pytest
 
 import cogdist
 
-def test_bootstrap_sample():
-    counts = np.array([5, 0, 4, 10, 0, 0])
+
+@pytest.mark.parametrize("counts", [np.array([5, 0, 4, 10, 0, 0])])
+def test_bootstrap_sample(counts):
     sample_counts = cogdist.bootstrap_sample(counts)
 
     assert sample_counts.sum() == counts.sum()
