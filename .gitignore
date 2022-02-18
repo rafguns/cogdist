@@ -44,3 +44,4 @@ nosetests.xml
 .ipynb*
 .mypy_cache
 .vscode
+pytestdebug.log
