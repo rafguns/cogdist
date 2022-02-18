@@ -1,3 +1,4 @@
+import typing
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import pdist, squareform
@@ -21,7 +22,7 @@ def ensure_symmetric(M: np.ndarray) -> None:
         raise ValueError("M is not square!")
 
 
-def barycenter(counts, coords):
+def barycenter(counts: np.ndarray, coords: np.ndarray) -> np.ndarray:
     """Calculate the barycenter for the given counts and coordinates
 
     Arguments
@@ -50,15 +51,17 @@ def barycenter(counts, coords):
     return a.sum(axis=1) / sum(counts)
 
 
-def sa_vector(counts, S, normalize=True):
+def sa_vector(
+    counts: np.ndarray, sim_matrix: np.ndarray, normalize: bool = True
+) -> np.ndarray:
     """Calculate the similarity adapted vector for the given counts and
-    coordinates
+    similarity matrix
 
     Arguments
     ---------
     counts : an iterable
         Counts for each point (this should have length m)
-    S : a symmetric numpy.ndarray
+    sim_matrix : a symmetric numpy.ndarray
         Similarity matrix
     normalize : True|False
         Whether to normalize cordinates
@@ -69,29 +72,31 @@ def sa_vector(counts, S, normalize=True):
         Similarity adapted vector
 
     """
-    ensure_symmetric(S)
+    ensure_symmetric(sim_matrix)
 
-    if len(counts) != len(S):
+    if len(counts) != len(sim_matrix):
         raise ValueError(
             "'counts' should have the same number of items "
             "(now: {}) as rows of similarity matrix (now: {})".format(
-                len(counts), len(S)
+                len(counts), len(sim_matrix)
             )
         )
 
-    raw_sa_vector = (S * counts).sum(axis=1)
+    raw_sa_vector = (sim_matrix * counts).sum(axis=1)
     return raw_sa_vector / raw_sa_vector.sum() if normalize else raw_sa_vector
 
 
-def weighted_cosine(u, v, S):
-    ensure_symmetric(S)
-    if len(u) != len(v) != len(S):
+def weighted_cosine(u: np.ndarray, v: np.ndarray, sim_matrix: np.ndarray) -> np.ndarray:
+    ensure_symmetric(sim_matrix)
+    if len(u) != len(v) != len(sim_matrix):
         raise ValueError("Vectors or similarity matrix of different length.")
 
-    return (u @ S @ v) / np.sqrt((u @ S @ u) * (v @ S @ v))
+    return (u @ sim_matrix @ v) / np.sqrt((u @ sim_matrix @ u) * (v @ sim_matrix @ v))
 
 
-def as_square_matrix(M, compare_by, *args, **kwargs):
+def as_square_matrix(
+    M: np.ndarray, compare_by: typing.Union[str, typing.Callable], *args, **kwargs
+) -> np.ndarray:
     """Calculate pairwise distances or similarities
 
     Arguments
@@ -128,7 +133,7 @@ def as_square_matrix(M, compare_by, *args, **kwargs):
     return S
 
 
-def euclidean_distance(a, b):
+def euclidean_distance(a: np.ndarray, b: np.ndarray) -> typing.Union[float, np.ndarray]:
     """Determine Euclidean distance between two vectors/arrays
 
     If a and b are 1D vectors, return Euclidean distance as a float.
