@@ -2,7 +2,8 @@ import joblib
 import numpy as np
 from tqdm import trange
 
-memory = joblib.Memory(cachedir=".cache", verbose=0)
+cachedir=".cache"
+memory = joblib.Memory(cachedir, verbose=0)
 
 
 def bootstrap_sample(counts):
