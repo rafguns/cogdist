@@ -1,5 +1,3 @@
-from __future__ import division
-
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import pdist, squareform
@@ -13,7 +11,8 @@ __all__ = [
 ]
 
 
-def ensure_symmetric(M):
+def ensure_symmetric(M: np.ndarray) -> None:
+    """Ensure that M is a square, symmetric matrix"""
     # XXX This does only a very basic check. It should be tested/profiled if a
     # more precise check is not too expensive computationally. Should be
     # sufficient for now.
@@ -27,7 +26,7 @@ def barycenter(counts, coords):
 
     Arguments
     ---------
-     counts : an iterable
+    counts : an iterable
          Counts for each point (this should have length m)
     coords : an m * n numpy.ndarray
          Array containing coordinates for m points in n dimensions
