@@ -25,17 +25,17 @@ def ensure_symmetric(M):
 def barycenter(counts, coords):
     """Calculate the barycenter for the given counts and coordinates
 
-   Arguments
-   ---------
-    counts : an iterable
-        Counts for each point (this should have length m)
-   coords : an m * n numpy.ndarray
-        Array containing coordinates for m points in n dimensions
+    Arguments
+    ---------
+     counts : an iterable
+         Counts for each point (this should have length m)
+    coords : an m * n numpy.ndarray
+         Array containing coordinates for m points in n dimensions
 
-    Returns
-    -------
-    barycenter_coords : numpy.ndarray of length n
-        Coordinates of the barycenter (n dimensions)
+     Returns
+     -------
+     barycenter_coords : numpy.ndarray of length n
+         Coordinates of the barycenter (n dimensions)
 
     """
     m, _ = coords.shape
