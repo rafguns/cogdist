@@ -1,14 +1,20 @@
 import joblib
 import numpy as np
-from tqdm import trange
+from tqdm.auto import trange
 
-cachedir=".cache"
+cachedir = ".cache"
 memory = joblib.Memory(cachedir, verbose=0)
 
 
-def bootstrap_sample(counts):
-    # counts is an array detailing the number of papers per journal. First,
-    # transform it into a paper array where each value denotes that paper's
+def bootstrap_sample(counts: np.ndarray) -> np.ndarray:
+    """Draw a bootstrapped sample of papers
+
+    `counts` is an array detailing the number of papers per journal (or subject
+    category). We draw a sample with replacement from those journals, and return
+    an 'alternative' count vector.
+
+    """
+    #  First, transform into a paper array where each value denotes that paper's
     # journal.
     n_counts = counts.size
     papers = np.repeat(np.arange(n_counts), counts.astype("int64"))
