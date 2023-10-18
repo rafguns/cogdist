@@ -1,6 +1,7 @@
 import joblib
 import numpy as np
 from tqdm.auto import trange
+from typing import Callable, Optional
 
 cachedir = ".cache"
 memory = joblib.Memory(cachedir, verbose=0)
@@ -26,39 +27,35 @@ def bootstrap_sample(counts: np.ndarray) -> np.ndarray:
     return np.bincount(sample, minlength=n_counts)
 
 
-def bootstrap_replication(counts, coords, func, *args, **kwargs):
+def bootstrap_replication(
+    func: Callable,
+    coords: np.ndarray,
+    counts: np.ndarray,
+    counts2: Optional[np.ndarray] = None,
+    **kwargs,
+):
     sample = bootstrap_sample(counts)
+    if counts2 is None:
+        return func(coords, sample, **kwargs)
 
-    return func(sample, coords, *args, **kwargs)
+    sample2 = bootstrap_sample(counts2)
+    return func(coords, sample, sample2, **kwargs)
 
 
 @memory.cache
-def bootstrap_samples(counts, coords, num_samples, func, *args, **kwargs):
+def bootstrap_samples(
+    func: Callable,
+    coords: np.ndarray,
+    counts: np.ndarray,
+    counts2: Optional[np.ndarray] = None,
+    /,
+    num_samples: int = 1000,
+    **kwargs,
+):
     samples = np.empty((num_samples, coords.shape[1]))
 
     for i in trange(num_samples):
-        samples[i] = bootstrap_replication(counts, coords, func, *args, **kwargs)
-    return samples
-
-
-def bootstrap_replication2(counts1, counts2, coords, func, *args, **kwargs):
-    sample1 = bootstrap_sample(counts1)
-    sample2 = bootstrap_sample(counts2)
-
-    return func(sample1, sample2, coords, *args, **kwargs)
-
-
-# XXX ugly duplication here. Seems like it should be possible to subsume the
-# barycenter and SAPV CIs here as well, if we move more stuff to a separate
-# function (the func to be called)
-@memory.cache
-def bootstrap_samples2(counts1, counts2, coords, num_samples, func, *args, **kwargs):
-    samples = np.empty(num_samples)
-
-    for i in trange(num_samples):
-        samples[i] = bootstrap_replication2(
-            counts1, counts2, coords, func, *args, **kwargs
-        )
+        samples[i] = bootstrap_replication(func, coords, counts, counts2, **kwargs)
     return samples
 
 
